@@ -1,0 +1,36 @@
+# Import necessary modules from NLTK
+import nltk
+from nltk.chat.util import Chat, reflections
+
+# Define patterns and responses for the chatbot
+pairs = [
+    [
+        r"my name is (.*)",
+        ["Hello %1, how can I help you today?",]
+    ],
+    [
+        r"hello",
+        ["My name is Chatbot and I'm here to assist you.",]
+    ],
+    [
+        r"can you help me",
+        ["You can ask me any questions regarding our products or services.",]
+    ],
+    # Add more patterns and responses here
+]
+
+# Define the main function for the chatbot
+def chatbot():
+    print("Hi! I'm a customer service chatbot. How can I assist you today?")
+    
+    # Create a Chat object with defined patterns and responses
+    chat = Chat(pairs, reflections)
+    
+    # Start the conversation with the chatbot
+    chat.converse()
+
+# Check if the script is run as the main program
+if __name__ == "__main__":
+    # Call the chatbot function
+    chatbot()
+

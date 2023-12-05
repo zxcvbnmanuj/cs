@@ -1,0 +1,73 @@
+import random
+
+# Function to check if placing a queen at position (i, j) is possible
+def checkPossibility(chessBoard, i, j):
+    for row in range(len(chessBoard)):
+        for element in range(len(chessBoard[row])):
+            if chessBoard[row][element] == 'Q':
+                jDist = abs(j - element)
+                iDist = abs(i - row)
+                if i == row or j == element or jDist == iDist:
+                    return False
+    return True
+
+# Heuristic function to calculate the number of queens on the board
+def hueristicFunction(chessBoard, goal, i, j):
+    count = 0
+    for row in chessBoard:
+        for element in row:
+            if element == 'Q':
+                count += 1
+    if i != -1 and j != -1:
+        count += 1
+    return (goal - count)
+
+# Initialize the chessboard with empty cells
+N = int(input("Enter value of N in N-Queens Problem "))
+chessBoard = [['-'] * N for i in range(N)]
+
+# Loop until the heuristic function reaches the goal (all queens placed)
+while hueristicFunction(chessBoard, N, -1, -1) != 0:
+    # Reset the chessboard for a new placement attempt
+    chessBoard = [['-'] * N for i in range(N)]
+
+    # Loop through each row to find the best placement for a queen
+    for row in range(len(chessBoard)):
+        dist = -1
+        i = -1
+        j = -1
+        resultList = []
+
+        # Loop through each element in the row
+        for element in range(len(chessBoard[row])):
+            # Check if placing a queen at this position is possible
+            if checkPossibility(chessBoard, row, element):
+                # Calculate the heuristic distance for this placement
+                hDist = hueristicFunction(chessBoard, N, row, element)
+                
+                # Update the best position if the heuristic distance is greater
+                if dist <= hDist:
+                    dist = hDist
+                    i = row
+                    j = element
+                    resultList.append([row, element])
+
+        # If there are multiple positions with the same heuristic distance, choose one randomly
+        if len(resultList) > 0:
+            idex, jdex = resultList[random.randint(0, len(resultList) - 1)]
+            print("\n i index=", idex, "\n j index=", jdex)
+            chessBoard[idex][jdex] = 'Q'
+
+    # Print the current state of the chessboard
+    for row1 in chessBoard:
+        print("\t", row1)
+    
+    # Print the heuristic value for the current state
+    print("Heuristic value is: ", hueristicFunction(chessBoard, N, -1, -1), "\n")
+
+# Print the final solution
+print("\nFollowing is the Global maxima solution for", N, "Queen Problem with heuristic distance from goal state =", hueristicFunction(chessBoard, N, -1, -1), "\n\n")
+for row1 in chessBoard:
+    print("\t", row1)
+print("\n")
+

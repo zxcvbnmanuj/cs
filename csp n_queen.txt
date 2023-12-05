@@ -1,0 +1,65 @@
+# Get the number of queens from user input
+global N
+N = int(input("Enter number of queens: "))
+
+# Initialize the chessboard with empty cells
+Board = [['_' for x in range(N)] for y in range(N)]
+
+# Function to print the chessboard
+def printBoard(Board):
+    for i in Board:
+        for j in i:
+            print(j, end='')
+        print(" ")
+
+# Function to check if it's safe to place a queen at a given position
+def isSafe(Board, row, col):
+    # Check if there is a queen in the same row
+    for i in range(col):
+        if Board[row][i] == 'Q':
+            return False
+    
+    # Check if there is a queen in the upper diagonal
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if Board[i][j] == 'Q':
+            return False
+    
+    # Check if there is a queen in the lower diagonal
+    for i, j in zip(range(row, N, 1), range(col, -1, -1)):
+        if Board[i][j] == 'Q':
+            return False
+    
+    return True
+
+# Function to solve the N-Queens problem using backtracking
+def SolveQueen(Board, col):
+    # If all queens are placed, return True
+    if col >= N:
+        return True
+    
+    # Try placing the queen in each row of the current column
+    for i in range(N):
+        if isSafe(Board, i, col):
+            # Place the queen and move to the next column
+            Board[i][col] = 'Q'
+            printBoard(Board)
+            print(' ')
+            
+            # Recur to place queens in the next columns
+            if SolveQueen(Board, col + 1):
+                return True
+            
+            # If placing the queen doesn't lead to a solution, backtrack
+            Board[i][col] = '_'
+            print('\nBacktracking here...')
+    
+    # If no solution is found for the current column, return False
+    return False
+
+# Start the solving process from the first column
+if SolveQueen(Board, 0) == False:
+    print('\nSolution does not exist')
+else:
+    print('\nFinal solution')
+    printBoard(Board)
+
